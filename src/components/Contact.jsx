@@ -55,7 +55,7 @@ export default function Contact() {
                 <HiOutlineMail className="text-purple-400 text-xl" />
                 <span>
                   <span className="font-medium text-white">Email:</span>{" "}
-                  syedhassanshah154@hmail.com
+                  syedhassanshah154@gmail.com
                 </span>
               </li>
               <li className="flex items-center gap-3">
