@@ -65,7 +65,7 @@ export default function Contact() {
         <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-10">
           {/* Contact Form */}
           <form 
-            action={`https://formspree.io/f/${process.env.REACT_APP_FORMSPREE_ID}`}
+            action={`https://formspree.io/f/${import.meta.env.VITE_FORMSPREE_ID}`}
             method="POST"
             onSubmit={handleSubmit}
             className="flex-1 flex flex-col gap-4 bg-gray-900 p-8 rounded-2xl shadow-xl border border-gray-700"
