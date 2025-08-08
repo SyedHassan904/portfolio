@@ -17,7 +17,7 @@ const projects = [
     category: "MERN", 
     description: "Full-featured stock image marketplace with user uploads, search, and purchases. Built with MongoDB, Express, React, and Node.js.", 
     github: "https://github.com/SyedHassan904/StockImages_MERN", 
-    website: "https://stock-images-mern-s4h1.vercel.app/", // Added website URL
+    website: "https://visualstock.vercel.app/", // Added website URL
     image: imageStockImage,
     tech: ["MongoDB", "Express", "React", "Node.js", "Redux"]
   },
