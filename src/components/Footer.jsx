@@ -8,7 +8,7 @@ export default function Footer() {
         <a href="https://www.linkedin.com/in/syed-hassan-7853b4371/" className="hover:text-blue-400"><FaLinkedin size={24} /></a>
         <a href="#" className="hover:text-blue-400"><FaTwitter size={24} /></a>
       </div>
-      <p className="text-sm">© 2025 Syed Hassan. All rights reserved.</p>
+      <p className="text-sm">© 2026 Syed Hassan. All rights reserved.</p>
     </footer>
   );
 }
