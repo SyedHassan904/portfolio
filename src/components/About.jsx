@@ -1,111 +1,226 @@
-import { useEffect, useRef } from "react";
-import { motion } from "framer-motion";
-import { FaDownload } from "react-icons/fa";
+import { useEffect, useRef, useState } from "react";
+import { FaDownload, FaReact, FaNodeJs, FaDatabase, FaPython, FaMicrochip, FaBrain } from "react-icons/fa";
+import { SiNextdotjs } from "react-icons/si";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
+import profilePic from "../assets/pfkotlin.png";
+import Magnetic from "./Magnetic";
 
 gsap.registerPlugin(ScrollTrigger);
 
+const orbitTechs = [
+  { name: "React", icon: <FaReact className="text-[#61dafb]" />, color: "#61dafb", desc: "Building interactive user interfaces and web architectures." },
+  { name: "Next.js", icon: <SiNextdotjs className="text-white" />, color: "#ffffff", desc: "Production-ready server components and optimized static builds." },
+  { name: "Node.js", icon: <FaNodeJs className="text-[#339933]" />, color: "#339933", desc: "Designing responsive REST APIs and backend microservices." },
+  { name: "MongoDB", icon: <FaDatabase className="text-[#47a248]" />, color: "#47a248", desc: "Constructing scalable document schemas and database logic." },
+  { name: "IoT & Hardware", icon: <FaMicrochip className="text-[#ff9900]" />, color: "#ff9900", desc: "Developing low-latency firmwares on NodeMCU & ESP32." },
+  { name: "AI & ML", icon: <FaBrain className="text-[#ec4899]" />, color: "#ec4899", desc: "Training vision classifiers and integrating intelligence models." },
+  { name: "Python", icon: <FaPython className="text-[#3776ab]" />, color: "#3776ab", desc: "Performing deep analysis and custom data scraping scripts." },
+];
+
 export default function About() {
-  const aboutRef = useRef(null);
-  const cardsRef = useRef([]);
+  const containerRef = useRef(null);
+  const orbitRef = useRef(null);
+  const textRef = useRef(null);
+  const cvCardRef = useRef(null);
+  const [activeTech, setActiveTech] = useState(null);
+  
+  // Use refs to track animation angle and pause state
+  // This keeps the loop continuous and prevents useEffect from re-running on state change
+  const angleRef = useRef(0);
+  const isPausedRef = useRef(false);
 
   useEffect(() => {
-    gsap.fromTo(
-      aboutRef.current,
-      { opacity: 0, y: 50 },
-      {
-        opacity: 1,
-        y: 0,
-        duration: 1,
-        scrollTrigger: {
-          trigger: aboutRef.current,
-          start: "top 80%",
-          toggleActions: "play reverse play reverse",
-        },
-      }
-    );
-
-    cardsRef.current.forEach((card, index) => {
+    // ScrollTrigger to reveal the introduction paragraph word-by-word
+    const paragraphs = textRef.current.querySelectorAll(".scroll-reveal-text");
+    paragraphs.forEach((p) => {
       gsap.fromTo(
-        card,
-        { opacity: 0, y: 50 },
+        p,
+        { opacity: 0, y: 30 },
         {
           opacity: 1,
           y: 0,
-          duration: 0.8,
-          delay: index * 0.1,
+          duration: 1.0,
           scrollTrigger: {
-            trigger: card,
+            trigger: p,
             start: "top 85%",
-            toggleActions: "play reverse play reverse",
+            toggleActions: "play none none reverse",
           },
         }
       );
     });
-  }, []);
+
+    // Reveal CV download card
+    gsap.fromTo(
+      cvCardRef.current,
+      { opacity: 0, scale: 0.9, y: 40 },
+      {
+        opacity: 1,
+        scale: 1,
+        y: 0,
+        duration: 1,
+        scrollTrigger: {
+          trigger: cvCardRef.current,
+          start: "top 90%",
+          toggleActions: "play none none reverse",
+        },
+      }
+    );
+
+    // Orbit Animation Loop
+    const orbitContainer = orbitRef.current;
+    if (!orbitContainer) return;
+
+    const items = orbitContainer.querySelectorAll(".orbit-item");
+    const radius = window.innerWidth < 640 ? 110 : 160; // Adjust radius based on screen size
+    const total = items.length;
+    let animId;
+
+    const updateOrbit = () => {
+      if (!isPausedRef.current) {
+        angleRef.current += 0.0035; // Increment angle continuously
+      }
+
+      items.forEach((item, index) => {
+        const itemAngle = angleRef.current + (index / total) * 2 * Math.PI;
+        const x = Math.cos(itemAngle) * radius;
+        const y = Math.sin(itemAngle) * radius;
+
+        // Smooth placement via GSAP
+        gsap.set(item, {
+          x,
+          y,
+          xPercent: -50,
+          yPercent: -50,
+        });
+      });
+
+      animId = requestAnimationFrame(updateOrbit);
+    };
+
+    updateOrbit();
+
+    return () => cancelAnimationFrame(animId);
+  }, []); // Run exactly once on mount!
 
   return (
     <section
       id="about"
-      ref={aboutRef}
-      className="p-10 bg-gradient-to-b from-black via-gray-900 to-gray-800 text-white"
+      ref={containerRef}
+      className="py-24 px-6 md:px-16 bg-[#0a0a0e]/40 relative overflow-hidden border-b border-white/5"
     >
-      <h2 className="text-4xl font-extrabold text-center text-purple-400 mb-10">
-        About Me
+      <div className="absolute inset-0 bg-radial-at-t from-accent-cyan/5 via-transparent to-transparent pointer-events-none" />
+
+      <h2 className="text-4xl sm:text-5xl font-display font-extrabold text-center mb-16 tracking-tight">
+        ABOUT <span className="bg-gradient-to-r from-accent-cyan to-accent-purple bg-clip-text text-transparent">MYSELF</span>
       </h2>
 
-      <p className="max-w-3xl mx-auto text-lg leading-relaxed text-gray-300 text-center">
-        I'm a passionate{" "}
-        <span className="text-blue-400 font-semibold">Computer Science student</span> with a strong foundation in software engineering.
-        I specialize in{" "}
-        <span className="text-purple-400">full-stack web development (MERN)</span> and have a keen interest in emerging technologies like{" "}
-        <span className="text-green-400">IoT</span>,{" "}
-        <span className="text-yellow-300">Operating Systems</span>,{" "}
-        <span className="text-pink-400">Networking</span>, and{" "}
-        <span className="text-red-400">Machine Learning / AI</span>.
-        <br /><br />
-        My goal is to craft scalable, efficient, and user-focused digital solutions while constantly learning and evolving with the tech world.
-      </p>
+      <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+        
+        {/* Left Side: Orbiting Tech Circle surrounding central Profile */}
+        <div className="lg:col-span-6 flex flex-col items-center justify-center min-h-[350px] sm:min-h-[420px] relative select-none">
+          <div
+            ref={orbitRef}
+            className="relative w-[280px] h-[280px] sm:w-[380px] sm:h-[380px] flex items-center justify-center"
+            onMouseEnter={() => {
+              isPausedRef.current = true;
+            }}
+            onMouseLeave={() => {
+              isPausedRef.current = false;
+              setActiveTech(null);
+            }}
+          >
+            {/* Center Profile Avatar */}
+            <div className="relative w-36 h-36 sm:w-44 sm:h-44 rounded-full overflow-hidden border-2 border-accent-purple/30 bg-[#0e0e12] p-1.5 shadow-2xl z-10 flex items-center justify-center">
+              <div className="w-full h-full rounded-full overflow-hidden relative">
+                <img
+                  src={profilePic}
+                  alt="Syed Hassan"
+                  className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500 hover:scale-105"
+                />
+              </div>
+              
+              {/* Outer pulsing ring */}
+              <div className="absolute inset-0 rounded-full border border-accent-cyan animate-ping opacity-25" />
+            </div>
 
-      <div className="max-w-5xl mx-auto mt-12 grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Education Card */}
-        <div
-          ref={(el) => (cardsRef.current[0] = el)}
-          className="bg-gray-800 p-6 rounded-2xl shadow-lg border border-gray-700 h-full flex flex-col justify-center"
-        >
-          <h3 className="text-2xl font-bold text-blue-400 mb-4 text-center">
-            Education
-          </h3>
-          <div className="space-y-2 text-gray-300 text-lg text-center">
-            <p>🎓 <strong>Bachelor’s in Computer Science</strong></p>
-            <p>🏫 University of Agriculture, Faisalabad</p>
-            <p>📅 2023 - 2027</p>
+            {/* Orbiting Icons */}
+            {orbitTechs.map((tech, idx) => (
+              <div
+                key={idx}
+                className="orbit-item absolute top-1/2 left-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full border border-white/10 bg-[#0e0e12] flex items-center justify-center text-lg sm:text-xl cursor-pointer hover:border-accent-cyan transition-colors z-20 shadow-xl"
+                style={{ transform: 'translate(-50%, -50%)' }}
+                onMouseEnter={() => setActiveTech(tech)}
+                onClick={() => setActiveTech(tech)}
+              >
+                {tech.icon}
+              </div>
+            ))}
+          </div>
+
+          {/* Interactive Tech Description Box */}
+          <div className="h-16 mt-8 w-full max-w-sm text-center">
+            {activeTech ? (
+              <div className="animate-fadeIn">
+                <h4 className="font-display font-extrabold text-sm text-accent-cyan uppercase tracking-wider">
+                  {activeTech.name}
+                </h4>
+                <p className="text-xs text-gray-400 mt-1 max-w-[280px] mx-auto leading-relaxed">
+                  {activeTech.desc}
+                </p>
+              </div>
+            ) : (
+              <p className="text-xs text-gray-500 italic">
+                Hover over the orbiting nodes to inspect my core development stacks.
+              </p>
+            )}
           </div>
         </div>
 
-        {/* CV Card */}
-        <div
-          ref={(el) => (cardsRef.current[1] = el)}
-          className="bg-gray-800 p-6 rounded-2xl shadow-lg border border-gray-700 h-full flex flex-col items-center justify-center text-center"
-        >
-          <h3 className="text-2xl font-bold text-purple-400 mb-4">
-            Download My CV
-          </h3>
-          <p className="text-gray-400 mb-6 max-w-xs">
-            Interested in working with me or learning more about my background? Click below to get my full CV.
-          </p>
-          <motion.a
-            href="/cv.pdf"
-            download="Syed-Hassan-CV.pdf"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-6 py-3 rounded-full font-semibold flex items-center gap-2 shadow-lg hover:shadow-2xl transition"
+        {/* Right Side: Introduction Details */}
+        <div ref={textRef} className="lg:col-span-6 space-y-8 text-left">
+          
+          <div className="space-y-4">
+            <h3 className="text-xl sm:text-2xl font-display font-bold text-accent-cyan">
+              Bridging Web Engineering & Hardware Logic
+            </h3>
+            <p className="scroll-reveal-text text-gray-300 leading-relaxed text-sm sm:text-base">
+              I'm a computer science undergraduate specialized in structuring complete web applications, machine learning architectures, and IoT smart environments. I bridge modern interface dynamics with physical hardware connectivity.
+            </p>
+            <p className="scroll-reveal-text text-gray-300 leading-relaxed text-sm sm:text-base">
+              As a student at the <strong className="text-white">University of Agriculture, Faisalabad</strong> (2023 - 2027), I investigate system configurations, database layouts, and network sockets to design highly resilient digital ecosystems.
+            </p>
+          </div>
+
+          {/* Glass CV Download Card */}
+          <div
+            ref={cvCardRef}
+            className="glass-panel p-6 rounded-2xl border-white/10 flex flex-col md:flex-row items-center gap-6 justify-between"
           >
-            <FaDownload />
-            Download CV
-          </motion.a>
+            <div className="text-center md:text-left">
+              <h4 className="text-lg font-display font-extrabold text-white">Download Credentials</h4>
+              <p className="text-xs text-gray-400 mt-1">Check my resume to inspect academic achievements and coding milestones.</p>
+            </div>
+            <Magnetic speed={0.3}>
+              <a
+                href="/cv.pdf"
+                download="Syed-Hassan-CV.pdf"
+                className="relative overflow-hidden border border-white/10 hover:border-accent-cyan/60 text-white font-mono uppercase text-[10px] tracking-[0.2em] px-8 py-4 rounded-full flex items-center justify-center gap-3 transition-all duration-500 shadow-xl group cursor-pointer bg-white/5 shrink-0"
+              >
+                {/* Hover gradient backing overlay */}
+                <span className="absolute inset-0 bg-gradient-to-r from-accent-cyan/15 to-accent-purple/15 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                
+                {/* Button internals */}
+                <span className="relative z-10 flex items-center gap-2 font-display text-xs font-extrabold tracking-widest text-white group-hover:text-accent-cyan transition-colors">
+                  <FaDownload className="text-accent-cyan group-hover:translate-y-0.5 transition-transform duration-300" />
+                  GET RESUME
+                </span>
+              </a>
+            </Magnetic>
+          </div>
+
         </div>
+
       </div>
     </section>
   );
