@@ -22,18 +22,18 @@ export default function CustomCursor() {
     document.body.classList.add('custom-cursor-active');
 
     // Set initial position out of view and hidden
-    gsap.set([dot, ring], { 
-      xPercent: -55, 
-      yPercent: -55, 
-      x: -100, 
+    gsap.set([dot, ring], {
+      xPercent: -55,
+      yPercent: -55,
+      x: -100,
       y: -100,
-      opacity: 0 
+      opacity: 0
     });
 
     // GSAP quickTo is optimized for high-frequency updates (like mousemove)
     const xDotTo = gsap.quickTo(dot, 'x', { duration: 0.08, ease: 'power3.out' });
     const yDotTo = gsap.quickTo(dot, 'y', { duration: 0.08, ease: 'power3.out' });
-    
+
     const xRingTo = gsap.quickTo(ring, 'x', { duration: 0.35, ease: 'power3.out' });
     const yRingTo = gsap.quickTo(ring, 'y', { duration: 0.35, ease: 'power3.out' });
 
@@ -79,10 +79,10 @@ export default function CustomCursor() {
 
       const target = e.target.closest('[data-cursor]');
       const isInteractive = e.target.closest('a, button, [role="button"], input, textarea, select');
-      
+
       if (target) {
         const type = target.getAttribute('data-cursor');
-        
+
         if (type === 'view') {
           setCursorText('VIEW');
           gsap.to(ring, {
@@ -136,7 +136,7 @@ export default function CustomCursor() {
 
       const target = e.target.closest('[data-cursor]');
       const isInteractive = e.target.closest('a, button, [role="button"], input, textarea, select');
-      
+
       if (target || isInteractive) {
         setCursorText('');
         gsap.to(ring, {

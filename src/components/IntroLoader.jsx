@@ -45,7 +45,7 @@ export default function IntroLoader({ onComplete }) {
     });
 
     // 3. Subtitle Phase: Focus in (blur to clear) and scale up
-    tl.fromTo(subtitleRef.current, 
+    tl.fromTo(subtitleRef.current,
       { opacity: 0, y: 15, filter: "blur(12px)", scale: 0.95 },
       { opacity: 1, y: 0, filter: "blur(0px)", scale: 1.0, duration: 0.4, ease: "power3.out" }
     );

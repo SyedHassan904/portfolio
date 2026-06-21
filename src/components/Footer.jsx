@@ -17,7 +17,7 @@ export default function Footer() {
             <FaGithub size={20} />
           </a>
         </Magnetic>
-        
+
         <Magnetic speed={0.3} range={35}>
           <a
             href="https://www.linkedin.com/in/syed-hassan-7853b4371/"
@@ -28,7 +28,7 @@ export default function Footer() {
             <FaLinkedin size={18} />
           </a>
         </Magnetic>
-        
+
         <Magnetic speed={0.3} range={35}>
           <a
             href="#"
@@ -38,7 +38,7 @@ export default function Footer() {
           </a>
         </Magnetic>
       </div>
-      
+
       <p className="text-xs text-gray-500 font-mono tracking-wider">
         © {currentYear} SYED HASSAN. ALL RIGHTS RESERVED.
       </p>

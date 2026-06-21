@@ -11,8 +11,13 @@ export default function Magnetic({ children, speed = 0.5, range = 60 }) {
     const child = container.firstElementChild;
     if (!child) return;
 
-    // Apply inline flex or display block block positioning to make sure translation matches
-    child.style.display = child.style.display || 'inline-block';
+    // Apply inline-flex to preserve inner flex centering for alignment items
+    const currentDisplay = window.getComputedStyle(child).display;
+    if (currentDisplay === 'flex' || currentDisplay === 'inline-flex') {
+      child.style.display = 'inline-flex';
+    } else {
+      child.style.display = child.style.display || 'inline-flex';
+    }
 
     const handleMouseMove = (e) => {
       const { clientX, clientY } = e;
